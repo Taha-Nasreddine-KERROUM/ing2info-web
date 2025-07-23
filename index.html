@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+        }
+
+        /* Welcome Section */
+        .welcome {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .welcome h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .welcome p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* Navigation Cards */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .nav-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-card i {
+            font-size: 48px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .nav-card h3 {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .nav-card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .subject-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .subject-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .resource-buttons {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .resource-buttons.active {
+            display: grid;
+        }
+
+        .resource-btn {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .resource-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .links-container {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .links-container.active {
+            display: block;
+        }
+
+        .link-item {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .link-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .section-title {
+            color: white;
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Search Section */
+        .search-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .search-section.active {
+            display: block;
+        }
+
+        .search-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 20px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-input:focus {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-input::placeholder {
+            color: #666;
+        }
+
+        .search-results {
+            margin-top: 30px;
+        }
+
+        .search-result-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-result-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .search-result-title {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .search-result-category {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .search-result-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .no-results {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 18px;
+            padding: 40px;
+        }
+
+        .search-stats {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .welcome h1 {
+                font-size: 36px;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .subject-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resource-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="logo" onclick="showSearch()">
+            <i class="fas fa-search"></i> Student Portal
+        </div>
+        <div class="social-links">
+            <a href="https://telegram.org" target="_blank" title="Telegram">
+                <i class="fab fa-telegram"></i>
+            </a>
+            <a href="https://drive.google.com" target="_blank" title="Google Drive">
+                <i class="fab fa-google-drive"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Welcome Section -->
+    <div id="welcome" class="welcome">
+        <h1>Welcome to Your Study Hub</h1>
+        <p>Access all your academic resources in one place</p>
+    </div>
+
+    <!-- Main Navigation -->
+    <div id="main-nav" class="nav-grid">
+        <div class="nav-card" onclick="showSection('semester3')">
+            <i class="fas fa-book"></i>
+            <h3>Semester 3</h3>
+            <p>Access all Semester 3 subjects and materials</p>
+        </div>
+        <div class="nav-card" onclick="showSection('semester4')">
+            <i class="fas fa-graduation-cap"></i>
+            <h3>Semester 4</h3>
+            <p>Access all Semester 4 subjects and materials</p>
+        </div>
+        <div class="nav-card" onclick="showSection('teams')">
+            <i class="fas fa-users"></i>
+            <h3>Teams</h3>
+            <p>Connect with study groups and teams</p>
+        </div>
+        <div class="nav-card" onclick="showSection('sources')">
+            <i class="fas fa-link"></i>
+            <h3>Sources</h3>
+            <p>External learning resources and materials</p>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div id="search" class="content-section search-section">
+        <button class="back-btn" onclick="showMain()">
+            <i class="fas fa-arrow-left"></i> Back to Main
+        </button>
+        <div class="search-container">
+            <input
+                    type="text"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="Search for subjects, materials, teams, or resources..."
+                    oninput="performSearch()"
+            >
+        </div>
+        <div id="searchStats" class="search-stats"></div>
+        <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <!-- Semester 3 Section -->
+    <div id="semester3" class="content-section">
+        <button class="back-btn" onclick="showMain()">
+            <i class="fas fa-arrow-left"></i> Back to Main
+        </button>
+        <h2 class="section-title">Semester 3 Subjects</h2>
+        <div class="subject-grid">
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('alg-resources')">Algebra</button>
+                <div id="alg-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('algebra_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('algebra_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('algebra_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('prob-resources')">Proba Stat</button>
+                <div id="prob-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('probability_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('probability_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('probability_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('ent-resources')">Entrepreneuriat</button>
+                <div id="ent-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('entrepreneuriat_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('entrepreneuriat_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('entrepreneuriat_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('algo-resources')">Algo Comp</button>
+                <div id="algo-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('algorithms_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('algorithms_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('algorithms_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('oop1-resources')">OOP1</button>
+                <div id="oop1-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('oop1_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('oop1_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('oop1_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('analysis-resources')">Analysis</button>
+                <div id="analysis-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('analysis_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('analysis_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('analysis_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('archi-resources')">Archi</button>
+                <div id="archi-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('archi_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('archi_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('archi_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('struct-resources')">Structure</button>
+                <div id="struct-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('structure_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('structure_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('structure_course.pdf')">Course</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Semester 4 Section -->
+    <div id="semester4" class="content-section">
+        <button class="back-btn" onclick="showMain()">
+            <i class="fas fa-arrow-left"></i> Back to Main
+        </button>
+        <h2 class="section-title">Semester 4 Subjects</h2>
+        <div class="subject-grid">
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('oop2-resources')">OOP2</button>
+                <div id="oop2-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('oop2_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('oop2_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('oop2_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('thl-resources')">THL</button>
+                <div id="thl-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('thl_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('thl_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('thl_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('thg-resources')">THG</button>
+                <div id="thg-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('thg_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('thg_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('thg_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('eng-resources')">English</button>
+                <div id="eng-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('english_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('english_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('english_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('bdd-resources')">BDD</button>
+                <div id="bdd-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('bdd_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('bdd_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('bdd_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('si-resources')">SI</button>
+                <div id="si-resources" class="resource-buttons">
+                    <button class="resource-btn" onclick="downloadFile('si_cc.pdf')">CC</button>
+                    <button class="resource-btn" onclick="downloadFile('si_exam.pdf')">Exam</button>
+                    <button class="resource-btn" onclick="downloadFile('si_course.pdf')">Course</button>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('net-resources')">Net</button>
+                <div id="net-resources" class="resource-buttons">
+                    <div class="resource-group">
+                        <button class="resource-btn" onclick="toggleLinks('net_cc')">CC</button>
+                        <div id="net_cc" class="links-container">
+                            <a href="#" class="link-item">Discord: Algebra Study Group</a>
+                            <a href="#" class="link-item">WhatsApp: Algebra Help</a>
+                            <a href="#" class="link-item">Telegram: Math Solutions</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-group">
+                        <button class="resource-btn" onclick="toggleLinks('net_exam')">Exam</button>
+                        <div id="net_exam" class="links-container">
+                            <a href="#" class="link-item">Discord: Algebra Study Group</a>
+                            <a href="#" class="link-item">WhatsApp: Algebra Help</a>
+                            <a href="#" class="link-item">Telegram: Math Solutions</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-group">
+                        <button class="resource-btn" onclick="toggleLinks('net_course')">Course</button>
+                        <div id="net_course" class="links-container">
+                            <a href="#" class="link-item">Discord: Algebra Study Group</a>
+                            <a href="#" class="link-item">WhatsApp: Algebra Help</a>
+                            <a href="#" class="link-item">Telegram: Math Solutions</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teams Section -->
+    <div id="teams" class="content-section">
+        <button class="back-btn" onclick="showMain()">
+            <i class="fas fa-arrow-left"></i> Back to Main
+        </button>
+        <h2 class="section-title">Study Teams</h2>
+        <div class="subject-grid">
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleLinks('algebra-team')">Algebra Team</button>
+                <div id="algebra-team" class="links-container">
+                    <a href="#" class="link-item">Discord: Algebra Study Group</a>
+                    <a href="#" class="link-item">WhatsApp: Algebra Help</a>
+                    <a href="#" class="link-item">Telegram: Math Solutions</a>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleLinks('probability-team')">Probability Team</button>
+                <div id="probability-team" class="links-container">
+                    <a href="#" class="link-item">Discord: Stats Study Group</a>
+                    <a href="#" class="link-item">WhatsApp: Probability Help</a>
+                    <a href="#" class="link-item">Telegram: Statistics Chat</a>
+                </div>
+            </div>
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleLinks('oop-team')">OOP Team</button>
+                <div id="oop-team" class="links-container">
+                    <a href="#" class="link-item">Discord: Programming Hub</a>
+                    <a href="#" class="link-item">WhatsApp: OOP Study Group</a>
+                    <a href="#" class="link-item">GitHub: Code Repository</a>
+                </div>
+            </div>
+            <!-- Add more team links for other subjects -->
+        </div>
+    </div>
+
+    <!-- Sources Section -->
+    <div id="sources" class="content-section">
+        <button class="back-btn" onclick="showMain()">
+            <i class="fas fa-arrow-left"></i> Back to Main
+        </button>
+        <h2 class="section-title">Learning Sources</h2>
+        <div class="subject-grid">
+            <div class="subject-container">
+                <button class="subject-btn" onclick="toggleResources('algebra-sources')">Algebra Sources</button>
+                <div id="algebra-sources" class="resource-buttons">
+                    <button class="resource-btn" onclick="toggleLinks('algebra-books')">Books</button>
+                    <button class="resource-btn" onclick="toggleLinks('algebra-courses')">Courses</button>
+                    <button class="resource-btn" onclick="toggleLinks('algebra-tutorials')">Tutorials</button>
+                </div>
+                <div id="algebra-books" class="links-container">
+                    <a href="#" class="link-item">Linear Algebra and Its Applications</a>
+                    <a href="#" class="link-item">Abstract Algebra by Dummit</a>
+                    <a href="#" class="link-item">Khan Academy Algebra</a>
+                </div>
+                <div id="algebra-courses" class="links-container">
+                    <a href="#" class="link-item">MIT OpenCourseWare</a>
+                    <a href="#" class="link-item">Coursera Linear Algebra</a>
+                    <a href="#" class="link-item">edX Algebra Course</a>
+                </div>
+                <div id="algebra-tutorials" class="links-container">
+                    <a href="#" class="link-item">YouTube: 3Blue1Brown</a>
+                    <a href="#" class="link-item">PatrickJMT Tutorials</a>
+                    <a href="#" class="link-item">Professor Leonard</a>
+                </div>
+            </div>
+            <!-- Add more source sections for other subjects -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // Search data structure
+    const searchData = [
+        // Semester 3 subjects and materials
+        { title: "Algebra", category: "Semester 3", type: "subject", description: "Linear algebra, abstract algebra, and mathematical structures", action: () => showSection('semester3') },
+        { title: "Algebra CC", category: "Semester 3 > Algebra", type: "material", description: "Continuous assessment materials for Algebra", action: () => downloadFile('algebra_cc.pdf') },
+        { title: "Algebra Exam", category: "Semester 3 > Algebra", type: "material", description: "Exam papers and solutions for Algebra", action: () => downloadFile('algebra_exam.pdf') },
+        { title: "Algebra Course", category: "Semester 3 > Algebra", type: "material", description: "Complete course materials for Algebra", action: () => downloadFile('algebra_course.pdf') },
+
+        { title: "Probability & Statistics", category: "Semester 3", type: "subject", description: "Statistical analysis, probability theory, and data interpretation", action: () => showSection('semester3') },
+        { title: "Probability CC", category: "Semester 3 > Probability", type: "material", description: "Continuous assessment for Probability & Statistics", action: () => downloadFile('probability_cc.pdf') },
+        { title: "Probability Exam", category: "Semester 3 > Probability", type: "material", description: "Exam materials for Probability & Statistics", action: () => downloadFile('probability_exam.pdf') },
+        { title: "Probability Course", category: "Semester 3 > Probability", type: "material", description: "Course content for Probability & Statistics", action: () => downloadFile('probability_course.pdf') },
+
+        { title: "Entrepreneuriat", category: "Semester 3", type: "subject", description: "Business development, startup strategies, and innovation", action: () => showSection('semester3') },
+        { title: "Entrepreneuriat CC", category: "Semester 3 > Entrepreneuriat", type: "material", description: "Continuous assessment for Entrepreneuriat", action: () => downloadFile('entrepreneuriat_cc.pdf') },
+        { title: "Entrepreneuriat Exam", category: "Semester 3 > Entrepreneuriat", type: "material", description: "Exam materials for Entrepreneuriat", action: () => downloadFile('entrepreneuriat_exam.pdf') },
+        { title: "Entrepreneuriat Course", category: "Semester 3 > Entrepreneuriat", type: "material", description: "Course materials for Entrepreneuriat", action: () => downloadFile('entrepreneuriat_course.pdf') },
+
+        { title: "Algorithms & Complexity", category: "Semester 3", type: "subject", description: "Algorithm design, analysis, and computational complexity", action: () => showSection('semester3') },
+        { title: "Algorithms CC", category: "Semester 3 > Algorithms", type: "material", description: "Continuous assessment for Algorithms & Complexity", action: () => downloadFile('algorithms_cc.pdf') },
+        { title: "Algorithms Exam", category: "Semester 3 > Algorithms", type: "material", description: "Exam papers for Algorithms & Complexity", action: () => downloadFile('algorithms_exam.pdf') },
+        { title: "Algorithms Course", category: "Semester 3 > Algorithms", type: "material", description: "Course content for Algorithms & Complexity", action: () => downloadFile('algorithms_course.pdf') },
+
+        { title: "OOP1", category: "Semester 3", type: "subject", description: "Object-oriented programming fundamentals and concepts", action: () => showSection('semester3') },
+        { title: "OOP1 CC", category: "Semester 3 > OOP1", type: "material", description: "Continuous assessment for OOP1", action: () => downloadFile('oop1_cc.pdf') },
+        { title: "OOP1 Exam", category: "Semester 3 > OOP1", type: "material", description: "Exam materials for OOP1", action: () => downloadFile('oop1_exam.pdf') },
+        { title: "OOP1 Course", category: "Semester 3 > OOP1", type: "material", description: "Course materials for OOP1", action: () => downloadFile('oop1_course.pdf') },
+
+        { title: "Analysis", category: "Semester 3", type: "subject", description: "Mathematical analysis, calculus, and real analysis", action: () => showSection('semester3') },
+        { title: "Analysis CC", category: "Semester 3 > Analysis", type: "material", description: "Continuous assessment for Analysis", action: () => downloadFile('analysis_cc.pdf') },
+        { title: "Analysis Exam", category: "Semester 3 > Analysis", type: "material", description: "Exam papers for Analysis", action: () => downloadFile('analysis_exam.pdf') },
+        { title: "Analysis Course", category: "Semester 3 > Analysis", type: "material", description: "Course content for Analysis", action: () => downloadFile('analysis_course.pdf') },
+
+        { title: "Archi", category: "Semester 3", type: "subject", description: "Computer architecture and system design", action: () => showSection('semester3') },
+        { title: "Archi CC", category: "Semester 3 > Archi", type: "material", description: "Continuous assessment for Archi", action: () => downloadFile('archi_cc.pdf') },
+        { title: "Archi Exam", category: "Semester 3 > Archi", type: "material", description: "Exam materials for Archi", action: () => downloadFile('archi_exam.pdf') },
+        { title: "Archi Course", category: "Semester 3 > Archi", type: "material", description: "Course materials for Archi", action: () => downloadFile('archi_course.pdf') },
+
+        { title: "Structure", category: "Semester 3", type: "subject", description: "Data structures and algorithmic foundations", action: () => showSection('semester3') },
+        { title: "Structure CC", category: "Semester 3 > Structure", type: "material", description: "Continuous assessment for Structure", action: () => downloadFile('structure_cc.pdf') },
+        { title: "Structure Exam", category: "Semester 3 > Structure", type: "material", description: "Exam papers for Structure", action: () => downloadFile('structure_exam.pdf') },
+        { title: "Structure Course", category: "Semester 3 > Structure", type: "material", description: "Course content for Structure", action: () => downloadFile('structure_course.pdf') },
+
+        // Semester 4 subjects and materials
+        { title: "OOP2", category: "Semester 4", type: "subject", description: "Advanced object-oriented programming concepts", action: () => showSection('semester4') },
+        { title: "OOP2 CC", category: "Semester 4 > OOP2", type: "material", description: "Continuous assessment for OOP2", action: () => downloadFile('oop2_cc.pdf') },
+        { title: "OOP2 Exam", category: "Semester 4 > OOP2", type: "material", description: "Exam materials for OOP2", action: () => downloadFile('oop2_exam.pdf') },
+        { title: "OOP2 Course", category: "Semester 4 > OOP2", type: "material", description: "Course materials for OOP2", action: () => downloadFile('oop2_course.pdf') },
+
+        { title: "THL", category: "Semester 4", type: "subject", description: "Theoretical computer science and formal methods", action: () => showSection('semester4') },
+        { title: "THL CC", category: "Semester 4 > THL", type: "material", description: "Continuous assessment for THL", action: () => downloadFile('thl_cc.pdf') },
+        { title: "THL Exam", category: "Semester 4 > THL", type: "material", description: "Exam papers for THL", action: () => downloadFile('thl_exam.pdf') },
+        { title: "THL Course", category: "Semester 4 > THL", type: "material", description: "Course content for THL", action: () => downloadFile('thl_course.pdf') },
+
+        { title: "THG", category: "Semester 4", type: "subject", description: "Graph theory and discrete mathematics", action: () => showSection('semester4') },
+        { title: "THG CC", category: "Semester 4 > THG", type: "material", description: "Continuous assessment for THG", action: () => downloadFile('thg_cc.pdf') },
+        { title: "THG Exam", category: "Semester 4 > THG", type: "material", description: "Exam materials for THG", action: () => downloadFile('thg_exam.pdf') },
+        { title: "THG Course", category: "Semester 4 > THG", type: "material", description: "Course materials for THG", action: () => downloadFile('thg_course.pdf') },
+
+        { title: "English", category: "Semester 4", type: "subject", description: "English language and communication skills", action: () => showSection('semester4') },
+        { title: "English CC", category: "Semester 4 > English", type: "material", description: "Continuous assessment for English", action: () => downloadFile('english_cc.pdf') },
+        { title: "English Exam", category: "Semester 4 > English", type: "material", description: "Exam papers for English", action: () => downloadFile('english_exam.pdf') },
+        { title: "English Course", category: "Semester 4 > English", type: "material", description: "Course content for English", action: () => downloadFile('english_course.pdf') },
+
+        { title: "BDD", category: "Semester 4", type: "subject", description: "Database design and management systems", action: () => showSection('semester4') },
+        { title: "BDD CC", category: "Semester 4 > BDD", type: "material", description: "Continuous assessment for BDD", action: () => downloadFile('bdd_cc.pdf') },
+        { title: "BDD Exam", category: "Semester 4 > BDD", type: "material", description: "Exam materials for BDD", action: () => downloadFile('bdd_exam.pdf') },
+        { title: "BDD Course", category: "Semester 4 > BDD", type: "material", description: "Course materials for BDD", action: () => downloadFile('bdd_course.pdf') },
+
+        { title: "SI", category: "Semester 4", type: "subject", description: "Information systems and software engineering", action: () => showSection('semester4') },
+        { title: "SI CC", category: "Semester 4 > SI", type: "material", description: "Continuous assessment for SI", action: () => downloadFile('si_cc.pdf') },
+        { title: "SI Exam", category: "Semester 4 > SI", type: "material", description: "Exam papers for SI", action: () => downloadFile('si_exam.pdf') },
+        { title: "SI Course", category: "Semester 4 > SI", type: "material", description: "Course content for SI", action: () => downloadFile('si_course.pdf') },
+
+        { title: "Net", category: "Semester 4", type: "subject", description: "Computer networks and distributed systems", action: () => showSection('semester4') },
+        { title: "Net CC", category: "Semester 4 > Net", type: "material", description: "Continuous assessment for Net", action: () => downloadFile('net_cc.pdf') },
+        { title: "Net Exam", category: "Semester 4 > Net", type: "material", description: "Exam materials for Net", action: () => downloadFile('net_exam.pdf') },
+        { title: "Net Course", category: "Semester 4 > Net", type: "material", description: "Course materials for Net", action: () => downloadFile('net_course.pdf') },
+
+        // Teams
+        { title: "Algebra Team", category: "Teams", type: "team", description: "Study group for Algebra - Discord, WhatsApp, Telegram", action: () => showSection('teams') },
+        { title: "Probability Team", category: "Teams", type: "team", description: "Study group for Probability & Statistics", action: () => showSection('teams') },
+        { title: "OOP Team", category: "Teams", type: "team", description: "Programming study group for OOP subjects", action: () => showSection('teams') },
+        { title: "Algorithms Team", category: "Teams", type: "team", description: "Study group for Algorithms & Complexity", action: () => showSection('teams') },
+        { title: "Database Team", category: "Teams", type: "team", description: "Study group for BDD and database topics", action: () => showSection('teams') },
+
+        // Sources
+        { title: "Algebra Books", category: "Sources > Algebra", type: "resource", description: "Recommended textbooks and reference materials for Algebra", action: () => showSection('sources') },
+        { title: "Algebra Courses", category: "Sources > Algebra", type: "resource", description: "Online courses and MOOCs for Algebra", action: () => showSection('sources') },
+        { title: "Algebra Tutorials", category: "Sources > Algebra", type: "resource", description: "Video tutorials and learning resources for Algebra", action: () => showSection('sources') },
+        { title: "Programming Books", category: "Sources > Programming", type: "resource", description: "Essential books for OOP and programming concepts", action: () => showSection('sources') },
+        { title: "Programming Tutorials", category: "Sources > Programming", type: "resource", description: "Video tutorials for programming languages and concepts", action: () => showSection('sources') },
+        { title: "Database Resources", category: "Sources > Database", type: "resource", description: "Learning materials for database design and management", action: () => showSection('sources') },
+    ];
+
+    function showSearch() {
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // Hide welcome and main nav
+        document.getElementById('welcome').style.display = 'none';
+        document.getElementById('main-nav').style.display = 'none';
+
+        // Show search section
+        document.getElementById('search').classList.add('active');
+
+        // Focus on search input
+        setTimeout(() => {
+            document.getElementById('searchInput').focus();
+        }, 100);
+    }
+
+    function performSearch() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        const resultsContainer = document.getElementById('searchResults');
+        const statsContainer = document.getElementById('searchStats');
+
+        if (query === '') {
+            resultsContainer.innerHTML = '';
+            statsContainer.innerHTML = '';
+            return;
+        }
+
+        // Filter search data based on query
+        const results = searchData.filter(item =>
+            item.title.toLowerCase().includes(query) ||
+            item.category.toLowerCase().includes(query) ||
+            item.description.toLowerCase().includes(query) ||
+            item.type.toLowerCase().includes(query)
+        );
+
+        // Update stats
+        statsContainer.innerHTML = `Found ${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`;
+
+        // Display results
+        if (results.length === 0) {
+            resultsContainer.innerHTML = '<div class="no-results">No results found. Try searching with different keywords.</div>';
+        } else {
+            resultsContainer.innerHTML = results.map(item => `
+                    <div class="search-result-item" onclick="handleSearchResult('${item.title}')">
+                        <div class="search-result-title">${highlightText(item.title, query)}</div>
+                        <div class="search-result-category">${item.category} • ${item.type}</div>
+                        <div class="search-result-description">${highlightText(item.description, query)}</div>
+                    </div>
+                `).join('');
+        }
+    }
+
+    function highlightText(text, query) {
+        if (!query) return text;
+        const regex = new RegExp(`(${query})`, 'gi');
+        return text.replace(regex, '<strong style="background: rgba(255, 255, 0, 0.3);">$1</strong>');
+    }
+
+    function handleSearchResult(title) {
+        const item = searchData.find(item => item.title === title);
+        if (item && item.action) {
+            item.action();
+        }
+    }
+
+    function showSection(sectionId) {
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // Hide welcome and main nav
+        document.getElementById('welcome').style.display = 'none';
+        document.getElementById('main-nav').style.display = 'none';
+
+        // Show selected section
+        document.getElementById(sectionId).classList.add('active');
+    }
+
+    function showMain() {
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // Show welcome and main nav
+        document.getElementById('welcome').style.display = 'block';
+        document.getElementById('main-nav').style.display = 'grid';
+    }
+
+    function toggleResources(resourceId) {
+        const resources = document.getElementById(resourceId);
+        const isActive = resources.classList.contains('active');
+
+        // Close all other resource panels
+        document.querySelectorAll('.resource-buttons').forEach(panel => {
+            panel.classList.remove('active');
+        });
+
+        // Toggle current panel
+        if (!isActive) {
+            resources.classList.add('active');
+        }
+    }
+
+    function toggleLinks(linkId) {
+        const links = document.getElementById(linkId);
+        const isActive = links.classList.contains('active');
+
+        // Close all other link containers
+        document.querySelectorAll('.links-container').forEach(container => {
+            container.classList.remove('active');
+        });
+
+        // Toggle current container
+        if (!isActive) {
+            links.classList.add('active');
+        }
+    }
+
+    function downloadFile(filename) {
+        // Create a temporary blob for demonstration
+        const content = `This is a sample ${filename} file.\n\nContent would be here in a real implementation.`;
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+
+        // Clean up
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        // Show download notification
+        alert(`Downloading ${filename}...`);
+    }
+
+    // Add smooth scrolling and animations
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add entrance animation to nav cards
+        const cards = document.querySelectorAll('.nav-card');
+        cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+            card.style.animation = 'fadeIn 0.5s ease forwards';
+        });
+    });
+</script>
+</body>
+</html>
