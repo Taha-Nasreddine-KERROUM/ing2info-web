@@ -212,12 +212,24 @@
             transform: scale(1.05);
         }
 
+        .resource-group {
+            position: relative; /* This makes .links-container position relative to this group */
+        }
+
         .links-container {
+            position: absolute;
+            top: 100%;
+            left: 0;
+
+            z-index: 1000;
+            padding: 8px;
+            border-radius: 6px;
+
             display: none;
             margin-top: 10px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+
+            background: black;
+
         }
 
         .links-container.active {
